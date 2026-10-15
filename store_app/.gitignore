@@ -17,11 +17,34 @@ migrate_working_dir/
 *.ipr
 *.iws
 .idea/
+.vscode/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.p8
+*.jks
+*.keystore
+**/key.properties
+**/local.properties
+**/credentials.json
+**/service-account*.json
+/.firebase/
+
+# Firebase app configuration generated for local builds
+/lib/firebase_options.dart
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
+/macos/Runner/GoogleService-Info.plist
+
+# Keep local VS Code settings out of the repository; share project guidance in
+# tracked documentation or editor-specific recommendations instead.
 
 # Flutter/Dart/Pub related
 **/doc/api/

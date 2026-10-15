@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ErrorView extends StatelessWidget {
-  const ErrorView({required this.onRetry});
+  const ErrorView({super.key, required this.onRetry});
 
   final Future<void> Function() onRetry;
 

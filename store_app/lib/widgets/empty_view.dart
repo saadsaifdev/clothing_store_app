@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EmptyView extends StatelessWidget {
-  const EmptyView({required this.onRefresh});
+  const EmptyView({super.key, required this.onRefresh});
 
   final Future<void> Function() onRefresh;
 

@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:store_app/cart/cart_manager.dart';
 
 class HomeAppBar extends StatelessWidget {
-  const HomeAppBar({
-    super.key,
-    this.cartItemCount = 0,
-    this.onCartPressed,
-    this.onSearchPressed,
-  }) : assert(cartItemCount >= 0, 'cartItemCount cannot be negative');
+  const HomeAppBar({super.key, this.onCartPressed, this.onSearchPressed});
 
-  final int cartItemCount;
   final VoidCallback? onCartPressed;
   final VoidCallback? onSearchPressed;
 
@@ -40,31 +35,35 @@ class HomeAppBar extends StatelessWidget {
         ),
       ),
       actions: [
-        Badge(
-          isLabelVisible: cartItemCount > 0,
-          // هنا ضفنا الأنيشن السحري للرقم بدل ما يتبدل بشكل جامد
-          label: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300), // مدة الحركة
-            transitionBuilder: (child, animation) {
-              return ScaleTransition(scale: animation, child: child); // حركة تكبير وتصغير ناعمة
-            },
-            child: Text(
-              '$cartItemCount',
-              // نستخدم key حتى الـ AnimatedSwitcher يحس أن النص تغير ويشغل الأنيشن
-              key: ValueKey<int>(cartItemCount), 
-            ),
-          ),
-          backgroundColor: colorScheme.onSurface,
-          textColor: colorScheme.surface,
-          child: IconButton(
-            tooltip: 'Shopping cart',
-            onPressed: onCartPressed,
-            icon: FaIcon(
-              FontAwesomeIcons.cartPlus,
-              color: colorScheme.onSurface,
-              size: 20,
-            ),
-          ),
+        AnimatedBuilder(
+          animation: CartManager.instance,
+          builder: (context, _) {
+            final cartItemCount = CartManager.instance.itemCount;
+
+            return Badge(
+              isLabelVisible: cartItemCount > 0,
+              label: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) =>
+                    ScaleTransition(scale: animation, child: child),
+                child: Text(
+                  '$cartItemCount',
+                  key: ValueKey<int>(cartItemCount),
+                ),
+              ),
+              backgroundColor: colorScheme.onSurface,
+              textColor: colorScheme.surface,
+              child: IconButton(
+                tooltip: 'Shopping cart',
+                onPressed: onCartPressed,
+                icon: FaIcon(
+                  FontAwesomeIcons.cartPlus,
+                  color: colorScheme.onSurface,
+                  size: 20,
+                ),
+              ),
+            );
+          },
         ),
         const SizedBox(width: 8),
         IconButton(

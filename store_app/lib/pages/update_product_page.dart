@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:store_app/Models/Product_Model.dart';
-import 'package:store_app/services/UpdateـProductـService.dart';
+import 'package:store_app/models/product_model.dart';
+import 'package:store_app/services/update_product_service.dart';
 import 'package:store_app/widgets/custom_button.dart';
 import 'package:store_app/widgets/custom_text_form_field.dart';
 
@@ -39,7 +39,6 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
       _isInitialized = true;
       return;
     }
-
     _product = arguments;
     _nameController.text = arguments.title;
     _descriptionController.text = arguments.description;
@@ -83,9 +82,12 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
 
       if (!mounted) return;
       Navigator.pop(context, updatedProduct);
-    } catch (_) {
+    } on FormatException catch (e) {
       if (!mounted) return;
-      _showMessage('Failed to update product', isError: true);
+      _showMessage(e.message, isError: true);
+    } catch (e) {
+      if (!mounted) return;
+      _showMessage('Failed to update product. Please try again.', isError: true);
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);

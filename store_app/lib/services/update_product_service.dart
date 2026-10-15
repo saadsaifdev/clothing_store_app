@@ -1,4 +1,5 @@
 import 'package:store_app/helper/api.dart';
+import 'package:store_app/helper/api_config.dart';
 import 'package:store_app/models/product_model.dart';
 
 class UpdateProductService {
@@ -10,7 +11,7 @@ class UpdateProductService {
     required int id,
     required String title,
     required String price,
-    required String description, // وحدناها لتصبح description بالكامل
+    required String description,
     required String image,
     required String category,
   }) async {
@@ -47,13 +48,14 @@ class UpdateProductService {
     }
 
     final response = await _api.put(
-      url: 'https://fakestoreapi.com/products/$id',
+      url: ApiConfig.productById(id),
       token: null,
       body: {
         'title': cleanTitle,
-        'price': parsedPrice.toString(),
+        'price': parsedPrice,
         'description': cleanDescription,
-        'image': cleanImage,
+        'thumbnail': cleanImage,
+        'images': [cleanImage],
         'category': cleanCategory,
       },
     );

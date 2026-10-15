@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-/// Full-width primary action button used throughout the application.
 class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,

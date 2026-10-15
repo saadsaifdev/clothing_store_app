@@ -1,11 +1,24 @@
 import 'package:store_app/helper/api.dart';
+import 'package:store_app/helper/api_config.dart';
 
 class GetAllCategoriesServices {
-  final String baseUrl = 'https://fakestoreapi.com/products/categories';
+  Future<List<String>> getAllCategories() async {
+    final data = await Api().get(url: ApiConfig.categories);
 
-  Future<List<dynamic>> getAllCategories() async {
-    List<dynamic> data = await Api().get(url: baseUrl);
+    if (data is! List) {
+      throw const FormatException('Invalid categories response format.');
+    }
 
-    return data;
+    final categories = <String>[];
+
+    for (final item in data) {
+      if (item is Map && item['slug'] != null) {
+        categories.add(item['slug'].toString());
+      } else if (item is String) {
+        categories.add(item);
+      }
+    }
+
+    return categories;
   }
 }

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/cart/cart_manager.dart';
 import 'package:store_app/models/product_model.dart';
-import 'package:store_app/services/Get_All_Products_Services.dart';
+import 'package:store_app/pages/cart_view.dart';
+import 'package:store_app/pages/post_add_product_page.dart';
+import 'package:store_app/pages/product_details_page.dart';
+import 'package:store_app/pages/search_page.dart';
+import 'package:store_app/services/get_all_products_services.dart';
 import 'package:store_app/widgets/empty_view.dart';
 import 'package:store_app/widgets/error_view.dart';
 import 'package:store_app/widgets/loading_view.dart';
@@ -16,7 +21,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _cartItemCount = 0;
+  final CartManager _cart = CartManager.instance;
 
   final GetAllProductsServices _productsService = GetAllProductsServices();
 
@@ -44,10 +49,25 @@ class _HomePageState extends State<HomePage> {
     } catch (_) {}
   }
 
+  Future<void> _openAddProductPage() async {
+    final result = await Navigator.pushNamed(context, PostAddProductPage.id);
+
+    if (!mounted) return;
+
+    if (result != null) {
+      await _refreshProducts();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(
+        onPressed: _openAddProductPage,
+        tooltip: 'Add product',
+        child: const Icon(Icons.add),
+      ),
       body: FutureBuilder<List<ProductModel>>(
         future: _productsFuture,
         builder: (context, snapshot) {
@@ -68,13 +88,15 @@ class _HomePageState extends State<HomePage> {
           return ProductsView(
             products: products,
             onRefresh: _refreshProducts,
-            cartItemCount: _cartItemCount,
-            onCartPressed: () {
-            },
-            onAddToCart: () {
-              setState(() {
-                _cartItemCount++; 
-              });
+            onCartPressed: () => Navigator.pushNamed(context, CartView.id),
+            onAddToCart: _cart.add,
+            onProductTap: (product) => Navigator.pushNamed(
+              context,
+              ProductDetailsView.id,
+              arguments: product,
+            ),
+            onSearchPressed: () {
+              Navigator.pushNamed(context, SearchView.id);
             },
           );
         },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({
+    super.key,
     required this.title,
     required this.price,
     required this.onAddToCart,
@@ -14,7 +15,6 @@ class ProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
     return Container(
       height: 130,
       padding: const EdgeInsets.fromLTRB(16, 20, 12, 10),

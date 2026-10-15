@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/models/product_model.dart';
-import 'package:store_app/pages/update_product_page.dart';
 import 'package:store_app/widgets/product_details.dart';
 import 'package:store_app/widgets/product_image.dart';
 
@@ -9,12 +8,12 @@ class CustomCard extends StatelessWidget {
     super.key,
     required this.product,
     required this.onAddToCart,
-    this.onProductTap,
+    required this.onProductTap,
   });
 
   final ProductModel product;
   final VoidCallback onAddToCart;
-  final VoidCallback? onProductTap;
+  final VoidCallback onProductTap;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class CustomCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         clipBehavior: Clip.none,
         child: InkWell(
-          onTap: onProductTap ?? () => _openUpdatePage(context),
+          onTap: onProductTap,
           borderRadius: BorderRadius.circular(15),
           splashColor: colorScheme.primary.withValues(alpha: 0.08),
           highlightColor: colorScheme.primary.withValues(alpha: 0.04),
@@ -69,14 +68,6 @@ class CustomCard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  void _openUpdatePage(BuildContext context) {
-    Navigator.pushNamed(
-      context, 
-      UpdateProductPage.id,
-      arguments: product, 
     );
   }
 }

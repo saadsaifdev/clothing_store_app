@@ -23,16 +23,48 @@ class ProductModel {
       title: jsonData['title']?.toString() ?? 'No Title',
       price: (jsonData['price'] as num?)?.toDouble() ?? 0.0,
       description:
-          jsonData['description'] as String? ?? "No description available",
-      image:
-          (jsonData['image'] != null && jsonData['image'].toString().isNotEmpty)
-          ? jsonData['image'].toString()
-          : 'https://placehold.co/600x400/png?text=No+Image',
+          jsonData['description']?.toString() ?? 'No description available',
+      image: _resolveImageUrl(jsonData),
       category: jsonData['category']?.toString() ?? '',
-      rating: jsonData['rating'] != null
-          ? RatingModel.fromJson(jsonData['rating'] as Map<String, dynamic>)
-          : RatingModel(rate: 0.0, count: 0),
+      rating: _parseRating(jsonData),
     );
+  }
+
+  static String _resolveImageUrl(Map<String, dynamic> jsonData) {
+    final directImage = jsonData['image']?.toString();
+    if (directImage != null && directImage.isNotEmpty) {
+      return directImage;
+    }
+
+    final thumbnail = jsonData['thumbnail']?.toString();
+    if (thumbnail != null && thumbnail.isNotEmpty) {
+      return thumbnail;
+    }
+
+    final images = jsonData['images'];
+    if (images is List && images.isNotEmpty) {
+      final first = images.first?.toString() ?? '';
+      if (first.isNotEmpty) {
+        return first;
+      }
+    }
+
+    return 'https://placehold.co/600x400/png?text=No+Image';
+  }
+
+  static RatingModel _parseRating(Map<String, dynamic> jsonData) {
+    final ratingValue = jsonData['rating'];
+    if (ratingValue is Map<String, dynamic>) {
+      return RatingModel.fromJson(ratingValue);
+    }
+
+    if (ratingValue is num) {
+      final reviews = jsonData['reviews'];
+      final reviewCount = reviews is List ? reviews.length : 0;
+      return RatingModel(rate: ratingValue.toDouble(), count: reviewCount);
+    }
+
+    return RatingModel(rate: 0.0, count: 0);
   }
 }
 

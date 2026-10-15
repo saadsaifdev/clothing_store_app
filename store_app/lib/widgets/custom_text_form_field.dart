@@ -40,19 +40,16 @@ class CustomTextFormField extends StatelessWidget {
         hintStyle: TextStyle(color: Colors.grey.shade400),
         suffixIcon: suffixIcon,
 
-        // Normal border with rounded corners.
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade400),
           borderRadius: BorderRadius.circular(8),
         ),
 
-        // Focused border with rounded corners.
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.black, width: 1.5),
           borderRadius: BorderRadius.circular(8),
         ),
 
-        // Default fallback border with rounded corners.
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade400),
           borderRadius: BorderRadius.circular(8),

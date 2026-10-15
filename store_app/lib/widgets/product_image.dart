@@ -3,6 +3,7 @@ import 'package:store_app/widgets/image_placeholder.dart';
 
 class ProductImage extends StatelessWidget {
   const ProductImage({
+    super.key,
     required this.imageUrl,
     required this.cacheWidth,
   });

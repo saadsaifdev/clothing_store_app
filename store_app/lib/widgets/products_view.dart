@@ -8,16 +8,18 @@ class ProductsView extends StatelessWidget {
     super.key,
     required this.products,
     required this.onRefresh,
-    required this.cartItemCount,
     required this.onCartPressed,
-    required this.onAddToCart, // 1. أضفنا استلام دالة إضافة المنتج للسلة هنا
+    required this.onAddToCart,
+    required this.onProductTap,
+    required this.onSearchPressed,
   });
 
   final List<ProductModel> products;
   final Future<void> Function() onRefresh;
-  final int cartItemCount;
   final VoidCallback onCartPressed;
-  final VoidCallback onAddToCart; // 2. عرفنا نوع الدالة
+  final ValueChanged<ProductModel> onAddToCart;
+  final Function(ProductModel) onProductTap;
+  final VoidCallback onSearchPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +30,8 @@ class ProductsView extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           HomeAppBar(
-            cartItemCount: cartItemCount,
             onCartPressed: onCartPressed,
-            onSearchPressed: () {},
+            onSearchPressed: onSearchPressed,
           ),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 110, 16, 50),
@@ -44,7 +45,8 @@ class ProductsView extends StatelessWidget {
               delegate: SliverChildBuilderDelegate((context, index) {
                 return CustomCard(
                   product: products[index],
-                  onAddToCart: onAddToCart, // 3. مررنا الدالة لكل كارت منتج بنجاح!
+                  onAddToCart: () => onAddToCart(products[index]),
+                  onProductTap: () => onProductTap(products[index]),
                 );
               }, childCount: products.length),
             ),
