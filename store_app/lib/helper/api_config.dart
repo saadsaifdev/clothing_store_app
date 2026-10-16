@@ -23,6 +23,4 @@ class ApiConfig {
 
   static String categoryProducts(String categorySlug) =>
       '$productsBase/category/${Uri.encodeComponent(categorySlug)}';
-
-  static String get categories => '$productsBase/categories';
 }

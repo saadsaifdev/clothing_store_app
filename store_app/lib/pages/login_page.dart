@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:store_app/constants/auth_constants.dart';
 import 'package:store_app/pages/home_page.dart';
 import 'package:store_app/pages/register_page.dart';
+import 'package:store_app/services/auth_error_messages.dart';
 import 'package:store_app/widgets/custom_button.dart';
 import 'package:store_app/widgets/custom_text_form_field.dart';
 
@@ -204,14 +205,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushReplacementNamed(context, HomePage.id);
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
-      final message = switch (e.code) {
-        'user-not-found' => 'No user found for that email.',
-        'wrong-password' => 'Wrong password provided.',
-        'invalid-email' => 'Invalid email address.',
-        'invalid-credential' => 'Invalid email or password.',
-        _ => e.message ?? 'Authentication error',
-      };
-      _showSnackBar(message);
+      _showSnackBar(AuthErrorMessages.signIn(e));
     } catch (e) {
       if (!mounted) return;
       _showSnackBar('Login failed. Please try again.');

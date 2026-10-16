@@ -17,12 +17,7 @@ class CartView extends StatelessWidget {
         animation: cart,
         builder: (context, _) {
           if (cart.items.isEmpty) {
-            return const Center(
-              child: Text(
-                'Your cart is empty',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            );
+            return _EmptyCart(onContinueShopping: () => Navigator.pop(context));
           }
           return Column(
             children: [
@@ -60,6 +55,85 @@ class CartView extends StatelessWidget {
       ..showSnackBar(
         const SnackBar(content: Text('Checkout is not available yet.')),
       );
+  }
+}
+
+class _EmptyCart extends StatelessWidget {
+  const _EmptyCart({required this.onContinueShopping});
+
+  final VoidCallback onContinueShopping;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 360),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 76,
+                height: 76,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withValues(alpha: 0.08),
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: const SizedBox.square(
+                  dimension: 36,
+                  child: Icon(
+                    Icons.shopping_bag_outlined,
+                    size: 36,
+                    color: Color(0xFF9AA2A2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Your cart is empty',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Explore the store and add something you love.',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 28),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: onContinueShopping,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF174A4A),
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size.fromHeight(54),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Continue shopping',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

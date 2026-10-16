@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:store_app/constants/auth_constants.dart';
 import 'package:store_app/pages/home_page.dart';
+import 'package:store_app/services/auth_error_messages.dart';
 import 'package:store_app/widgets/custom_button.dart';
 import 'package:store_app/widgets/custom_text_form_field.dart';
 
@@ -198,14 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pushReplacementNamed(context, HomePage.id);
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
-      final message = switch (e.code) {
-        'weak-password' => 'The password provided is too weak.',
-        'email-already-in-use' =>
-          'The account already exists for that email.',
-        'invalid-email' => 'Invalid email address.',
-        _ => e.message ?? 'Registration error',
-      };
-      _showSnackBar(message);
+      _showSnackBar(AuthErrorMessages.registration(e));
     } catch (e) {
       if (!mounted) return;
       _showSnackBar('Registration failed. Please try again.');
